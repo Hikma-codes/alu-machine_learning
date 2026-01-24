@@ -5,12 +5,12 @@ Contains a function that returns the shape of a numpy.ndarray
 
 
 def np_shape(matrix):
-        """_summary_
+    """_summary_
 
-            Args:
-                    matrix (_type_): _description_
+    Args:
+        matrix (_type_): _description_
 
-                        Returns:
-                                _type_: _description_
-                                    """
-                                        return tuple(matrix.shape)
+    Returns:
+        _type_: _description_
+    """
+    return tuple(matrix.shape)

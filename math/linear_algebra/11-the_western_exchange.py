@@ -5,12 +5,12 @@ Contains a function that returns the transpose of a numpy.ndarray
 
 
 def np_transpose(matrix):
-        """_summary_
+    """_summary_
 
-            Args:
-                    matrix (_type_): _description_
+    Args:
+        matrix (_type_): _description_
 
-                        Returns:
-                                _type_: _description_
-                                    """
-                                        return matrix.T
+    Returns:
+        _type_: _description_
+    """
+    return matrix.T
