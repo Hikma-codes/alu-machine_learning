@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 '''
     Poisson distribution
-    to represents a poisson distribution
+    that represents a poisson distribution
 '''
 
 
 class Poisson:
     '''
-        Class Poisson to represents a
+        Class Poisson that represents a
         distribution of Poisson
     '''
 
     def factorial(self, k):
         '''
-            Calculating the factorial
+            Calculates the factorial
         '''
         if k < 0:
             return 0
@@ -23,22 +23,22 @@ class Poisson:
 
     def __init__(self, data=None, lambtha=1.):
         '''
-            A class constructor
+            Class constructor
         '''
         if data is None:
             if lambtha <= 0:
-                raise ValueError('the lambtha must be a positive value')
+                raise ValueError('lambtha must be a positive value')
             self.lambtha = float(lambtha)
         else:
             if type(data) is not list:
-                raise TypeError('the data must be a list')
+                raise TypeError('data must be a list')
             if len(data) < 2:
-                raise ValueError('the data must contain multiple values')
+                raise ValueError('data must contain multiple values')
             self.lambtha = float(sum(data) / len(data))
 
     def pmf(self, k):
         '''
-            Calculating the value of the
+            Calculates the value of the
             PMF for a given number of successes
         '''
         if k < 0:
@@ -50,7 +50,7 @@ class Poisson:
 
     def cdf(self, k):
         '''
-            Calculating the value of the
+            Calculates the value of the
             CDF for a given number of successes
         '''
         if type(k) is not int:
