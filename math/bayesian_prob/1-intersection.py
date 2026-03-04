@@ -1,4 +1,6 @@
- function def intersection(x, n, P, Pr):
+#!/usr/bin/env python3
+'''
+    a function def intersection(x, n, P, Pr):
     that calculates the intersection of obtaining
     the data with the probability of developing
     severe side effects given the data
