@@ -1,4 +1,6 @@
-lass Neuron that defines a single neuron performing binary classification
+#!/usr/bin/env python3
+"""
+Class Neuron that defines a single neuron performing binary classification
 """
 
 
