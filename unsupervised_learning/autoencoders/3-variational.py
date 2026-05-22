@@ -109,12 +109,9 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
         Variational autoencoder loss function
         """
 
-        xent_loss = (
-            input_dims *
-            keras.losses.binary_crossentropy(
-                x,
-                x_decoded_mean
-            )
+        xent_loss = input_dims * keras.backend.binary_crossentropy(
+            x,
+            x_decoded_mean
         )
 
         kl_loss = -0.5 * keras.backend.sum(
