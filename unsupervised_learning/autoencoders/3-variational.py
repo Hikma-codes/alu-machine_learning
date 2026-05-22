@@ -17,56 +17,111 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
         of the latent space representation
 
     Return: encoder, decoder, auto
-
     """
-    input_encoder = keras.Input(shape=(input_dims, ))
-    input_decoder = keras.Input(shape=(latent_dims, ))
 
-    encoded = keras.layers.Dense(hidden_layers[0],
-                                 activation='relu')(input_encoder)
+    input_encoder = keras.Input(shape=(input_dims,))
+    input_decoder = keras.Input(shape=(latent_dims,))
+
+    encoded = keras.layers.Dense(
+        hidden_layers[0],
+        activation='relu'
+    )(input_encoder)
+
     for enc in range(1, len(hidden_layers)):
-        encoded = keras.layers.Dense(hidden_layers[enc],
-                                     activation='relu')(encoded)
+        encoded = keras.layers.Dense(
+            hidden_layers[enc],
+            activation='relu'
+        )(encoded)
 
-    z_mean = keras.layers.Dense(latent_dims, activation=None)(encoded)
-    z_log_sigma = keras.layers.Dense(latent_dims, activation=None)(encoded)
+    z_mean = keras.layers.Dense(
+        latent_dims,
+        activation=None
+    )(encoded)
+
+    z_log_sigma = keras.layers.Dense(
+        latent_dims,
+        activation=None
+    )(encoded)
 
     def sample_z(args):
         """
         Sampling function
         """
         mu, sigma = args
+
         batch = keras.backend.shape(mu)[0]
         dim = keras.backend.int_shape(mu)[1]
-        eps = keras.backend.random_normal(shape=(batch, dim))
+
+        eps = keras.backend.random_normal(
+            shape=(batch, dim)
+        )
+
         return mu + keras.backend.exp(sigma / 2) * eps
 
-    z = keras.layers.Lambda(sample_z,
-                            output_shape=(latent_dims,))([z_mean, z_log_sigma])
+    z = keras.layers.Lambda(
+        sample_z,
+        output_shape=(latent_dims,)
+    )([z_mean, z_log_sigma])
 
-    encoder = keras.Model(inputs=input_encoder,
-                          outputs=[z, z_mean, z_log_sigma])
+    encoder = keras.Model(
+        inputs=input_encoder,
+        outputs=[z, z_mean, z_log_sigma]
+    )
 
-    decoded = keras.layers.Dense(hidden_layers[-1],
-                                 activation='relu')(input_decoder)
+    decoded = keras.layers.Dense(
+        hidden_layers[-1],
+        activation='relu'
+    )(input_decoder)
+
     for dec in range(len(hidden_layers) - 2, -1, -1):
-        decoded = keras.layers.Dense(hidden_layers[dec],
-                                     activation='relu')(decoded)
-    last = keras.layers.Dense(input_dims, activation='sigmoid')(decoded)
-    decoder = keras.Model(inputs=input_decoder, outputs=last)
+        decoded = keras.layers.Dense(
+            hidden_layers[dec],
+            activation='relu'
+        )(decoded)
+
+    last = keras.layers.Dense(
+        input_dims,
+        activation='sigmoid'
+    )(decoded)
+
+    decoder = keras.Model(
+        inputs=input_decoder,
+        outputs=last
+    )
 
     encoder_output = encoder(input_encoder)[0]
     decoder_output = decoder(encoder_output)
-    auto = keras.Model(inputs=input_encoder, outputs=decoder_output)
+
+    auto = keras.Model(
+        inputs=input_encoder,
+        outputs=decoder_output
+    )
 
     def vae_loss(x, x_decoded_mean):
-        """variational autoencoder loss function"""
-        xent_loss = input_dims * keras.losses.binary_crossentropy(x, x_decoded_mean)
-        kl_loss = - 0.5 * keras.backend.sum(
-            1 + z_log_sigma - keras.backend.square(z_mean) - keras.backend.exp(
-                z_log_sigma), axis=-1)
+        """
+        Variational autoencoder loss function
+        """
+
+        xent_loss = (
+            input_dims *
+            keras.losses.binary_crossentropy(
+                x,
+                x_decoded_mean
+            )
+        )
+
+        kl_loss = -0.5 * keras.backend.sum(
+            1 + z_log_sigma
+            - keras.backend.square(z_mean)
+            - keras.backend.exp(z_log_sigma),
+            axis=-1
+        )
+
         return xent_loss + kl_loss
 
-    auto.compile(optimizer='adam', loss=vae_loss)
+    auto.compile(
+        optimizer='adam',
+        loss=vae_loss
+    )
 
     return encoder, decoder, auto
